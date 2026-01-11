@@ -1,0 +1,22 @@
+meta {
+  name: [BUS] Availability
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://api-v3.mbta.com/predictions?filter[stop]=1295&filter[route]=65&include=vehicle
+  body: none
+  auth: none
+}
+
+params:query {
+  filter[stop]: 1295
+  filter[route]: 65
+  include: vehicle
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

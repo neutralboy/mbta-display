@@ -1,0 +1,21 @@
+meta {
+  name: [T] Availability
+  type: http
+  seq: 6
+}
+
+get {
+  url: https://api-v3.mbta.com/predictions?filter[stop]=70176&include=vehicle
+  body: none
+  auth: none
+}
+
+params:query {
+  filter[stop]: 70176
+  include: vehicle
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

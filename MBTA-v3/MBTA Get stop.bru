@@ -1,0 +1,21 @@
+meta {
+  name: MBTA Get stop
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://api-v3.mbta.com/stops?filter[latitude]=42.335909&filter[longitude]=-71.140369
+  body: none
+  auth: inherit
+}
+
+params:query {
+  filter[latitude]: 42.335909
+  filter[longitude]: -71.140369
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

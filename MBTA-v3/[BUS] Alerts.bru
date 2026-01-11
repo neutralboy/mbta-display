@@ -1,0 +1,21 @@
+meta {
+  name: [BUS] Alerts
+  type: http
+  seq: 4
+}
+
+get {
+  url: https://api-v3.mbta.com/alerts?filter[route]=65&filter[stop]=1295
+  body: none
+  auth: none
+}
+
+params:query {
+  filter[route]: 65
+  filter[stop]: 1295
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

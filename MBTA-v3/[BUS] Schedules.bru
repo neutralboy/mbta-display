@@ -1,0 +1,22 @@
+meta {
+  name: [BUS] Schedules
+  type: http
+  seq: 5
+}
+
+get {
+  url: https://api-v3.mbta.com/schedules?filter[route]=65&filter[stop]=1295&filter[date]=2026-01-11
+  body: none
+  auth: none
+}
+
+params:query {
+  filter[route]: 65
+  filter[stop]: 1295
+  filter[date]: 2026-01-11
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

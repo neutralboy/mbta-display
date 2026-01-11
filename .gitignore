@@ -1,0 +1,17 @@
+# ESP-IDF build output
+build/
+
+# Local SDK config backups
+sdkconfig.old
+
+# Local config secrets
+main/config.h
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]

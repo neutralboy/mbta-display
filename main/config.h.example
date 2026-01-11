@@ -1,0 +1,56 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+/**
+ * 1. Wifi config
+ */
+#define WIFI_SSID "YOUR_SSID"
+#define WIFI_PASS "YOUR_PASSWORD"
+
+/**
+ * 2. How often data should be fetched (in milliseconds)
+ */
+#define MBTA_FETCH_PERIOD_MS 30000
+
+/**
+ * Display Settings
+ */
+#define MBTA_BRIGHTNESS_PCT  30
+#define MBTA_SHOW_START_HOUR 6
+#define MBTA_SHOW_END_HOUR   15
+
+// Coordinates (Boston)
+#define WEATHER_LATITUDE  42.342110
+#define WEATHER_LONGITUDE -71.145805
+
+// How often weather data should be fetched (ms)
+#define WEATHER_FETCH_PERIOD_MS (10 * 60 * 1000)
+
+
+/**
+ * Timezone Config (Boston - EST/EDT)
+ */
+#define DEFAULT_TIMEZONE "EST5EDT,M3.2.0,M11.1.0"
+
+/**
+ * 3. Stop ID 1
+ * 5. Stop 1 Name
+ */
+#define MBTA_STOP_1_ID   "1295"
+#define MBTA_STOP_1_NAME "Bus 65 to Kenmore"
+
+/**
+ * 4. Stop ID 2
+ * 6. Stop 2 Name
+ */
+#define MBTA_STOP_2_ID   "70176"
+#define MBTA_STOP_2_NAME "T @ Beaconsfield"
+
+/**
+ * Internal URL construction
+ * You can customize these if you need specific filters (like filter[route]=...)
+ */
+#define MBTA_STOP_1_URL "https://api-v3.mbta.com/predictions?filter[stop]=" MBTA_STOP_1_ID "&filter[route]=65&page[limit]=10"
+#define MBTA_STOP_2_URL "https://api-v3.mbta.com/predictions?filter[stop]=" MBTA_STOP_2_ID "&page[limit]=10"
+
+#endif // CONFIG_H
