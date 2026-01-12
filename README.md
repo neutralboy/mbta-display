@@ -1,4 +1,4 @@
-# MBTA LCD Tracker
+# MBTA Tracker
 
 ![Predictions](./assets/prediction.png)
 ![Weather](./assets/weather.png)
