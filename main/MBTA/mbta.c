@@ -530,7 +530,7 @@ void MBTA_TaskStart(void)
         "mbta_task",
         8192,
         NULL,
-        1,
+        3,
         NULL,
         0);
 }

@@ -313,5 +313,5 @@ void Weather_TaskStart(void)
     }
     started = true;
 
-    xTaskCreatePinnedToCore(weather_task, "weather", 8192, NULL, 3, NULL, 0);
+    xTaskCreatePinnedToCore(weather_task, "weather", 8192, NULL, 1, NULL, 0);
 }

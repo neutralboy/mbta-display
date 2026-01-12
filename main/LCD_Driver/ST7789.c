@@ -66,37 +66,38 @@ void LCD_Init(void)
 static ledc_channel_config_t ledc_channel;
 void BK_Init(void)
 {
-    ESP_LOGI(TAG_LCD, "Turn off LCD backlight");
-    gpio_config_t bk_gpio_config = {
-        .mode = GPIO_MODE_OUTPUT,
-        .pin_bit_mask = 1ULL << EXAMPLE_PIN_NUM_BK_LIGHT
-    };
-    ESP_ERROR_CHECK(gpio_config(&bk_gpio_config));
+    ESP_LOGI(TAG_LCD, "Initializing LEDC for backlight");
     
-    // 配置LEDC
+    // Configure LEDC timer
     ledc_timer_config_t ledc_timer = {
-        .duty_resolution = LEDC_TIMER_13_BIT,
+        .duty_resolution = LEDC_ResolutionRatio,
         .freq_hz = 5000,
         .speed_mode = LEDC_LS_MODE,
         .timer_num = LEDC_HS_TIMER,
         .clk_cfg = LEDC_AUTO_CLK
     };
-    ledc_timer_config(&ledc_timer);
+    ESP_ERROR_CHECK(ledc_timer_config(&ledc_timer));
 
+    // Configure LEDC channel
     ledc_channel.channel    = LEDC_HS_CH0_CHANNEL;
     ledc_channel.duty       = 0;
     ledc_channel.gpio_num   = EXAMPLE_PIN_NUM_BK_LIGHT;
     ledc_channel.speed_mode = LEDC_LS_MODE;
+    ledc_channel.hpoint     = 0;
     ledc_channel.timer_sel  = LEDC_HS_TIMER;
-    ledc_channel_config(&ledc_channel);
-    ledc_fade_func_install(0);
+    ledc_channel.flags.output_invert = 0; // Default to non-inverted
+    ESP_ERROR_CHECK(ledc_channel_config(&ledc_channel));
 }
+
 void BK_Light(uint8_t Light)
 {   
     if(Light > 100) Light = 100;
-    uint16_t Duty = LEDC_MAX_Duty-(81*(100-Light));
-    if(Light == 0) Duty = 0;
-    // 设置PWM占空比
+    
+    // Calculate duty: 0 to LEDC_MAX_Duty
+    uint32_t Duty = (uint32_t)(((uint32_t)Light * LEDC_MAX_Duty) / 100);
+    
+    ESP_LOGI(TAG_LCD, "Setting backlight: %d%% (Duty: %lu)", Light, (unsigned long)Duty);
+    
     ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, Duty);
     ledc_update_duty(ledc_channel.speed_mode, ledc_channel.channel);
 }

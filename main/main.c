@@ -52,6 +52,7 @@ static lv_obj_t *s_mbta_big_minutes;
 static lv_obj_t *s_mbta_big_suffix;
 static lv_obj_t *s_mbta_row1;
 static lv_obj_t *s_mbta_row2;
+static lv_obj_t *s_mbta_weather_label;
 static lv_obj_t *s_mbta_time_label;
 static lv_obj_t *s_mbta_loader;
 static uint32_t s_mbta_last_version;
@@ -326,6 +327,20 @@ static void ui_mbta_init(lv_obj_t *parent)
     lv_obj_set_style_text_align(s_mbta_time_label, LV_TEXT_ALIGN_CENTER, 0);
     lv_label_set_text(s_mbta_time_label, "");
 
+    s_mbta_weather_label = lv_label_create(parent);
+    lv_obj_set_width(s_mbta_weather_label, lv_pct(100));
+    lv_obj_align(s_mbta_weather_label, LV_ALIGN_BOTTOM_MID, 0, -42);
+    lv_obj_set_style_text_color(s_mbta_weather_label, lv_color_white(), 0);
+#if LV_FONT_MONTSERRAT_16
+    lv_obj_set_style_text_font(s_mbta_weather_label, &lv_font_montserrat_16, 0);
+#elif LV_FONT_MONTSERRAT_14
+    lv_obj_set_style_text_font(s_mbta_weather_label, &lv_font_montserrat_14, 0);
+#elif LV_FONT_MONTSERRAT_12
+    lv_obj_set_style_text_font(s_mbta_weather_label, &lv_font_montserrat_12, 0);
+#endif
+    lv_obj_set_style_text_align(s_mbta_weather_label, LV_TEXT_ALIGN_CENTER, 0);
+    lv_label_set_text(s_mbta_weather_label, "");
+
     s_mbta_loader = lv_bar_create(s_mbta_big_box);
     lv_obj_set_size(s_mbta_loader, lv_pct(100), 5);
     lv_obj_align(s_mbta_loader, LV_ALIGN_BOTTOM_MID, 0, 0);
@@ -358,6 +373,17 @@ static void ui_mbta_update(void)
             lv_label_set_text(s_mbta_time_label, time_buf);
         } else {
             lv_label_set_text(s_mbta_time_label, "");
+        }
+
+        // Update Weather on MBTA screen
+        weather_state_t wst;
+        if (Weather_GetState(&wst) && wst.has_data) {
+            char w_buf[64];
+            snprintf(w_buf, sizeof(w_buf), "%d  L: %d H: %d  %s", 
+                     wst.temp_c, wst.low_c, wst.high_c, wst.condition);
+            lv_label_set_text(s_mbta_weather_label, w_buf);
+        } else {
+            lv_label_set_text(s_mbta_weather_label, "");
         }
     }
 
@@ -538,9 +564,11 @@ void app_main(void)
     RGB_ForceOff();
 
     LCD_Init();
-    ESP_LOGI("MAIN", "Initial brightness: %d%%", MBTA_BRIGHTNESS_PCT);
-    BK_Light(MBTA_BRIGHTNESS_PCT);
     LVGL_Init();
+
+    // Set brightness after all hardware init is complete
+    ESP_LOGI("MAIN", "Applying brightness: %d%%", MBTA_BRIGHTNESS_PCT);
+    BK_Light(MBTA_BRIGHTNESS_PCT);
 
     // Create two screens and switch between them as needed.
     s_screen_mbta = lv_obj_create(NULL);
